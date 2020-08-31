@@ -4,7 +4,7 @@
 
 ---------
 ## 鸣谢
-@[繁星点点-Liuran001](qqcn.xyz) / [GitHub:MiRouter/OpenWrtForMiWiFi](https://github.com/MiRouter/OpenWrtForMiWiFi)
+@[繁星点点-Liuran001](https://qqcn.xyz) / [GitHub:MiRouter/OpenWrtForMiWiFi](https://github.com/MiRouter/OpenWrtForMiWiFi)
 
 [Github:coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
 
