@@ -15,4 +15,4 @@
 
 
 
-![给👴编译OpenWrt][2]
+[![给👴编译OpenWrt][2]](https://github.com/0xc0000142/OpenWrtForMiWiFi/actions)
