@@ -18,9 +18,9 @@ on:
     branches:
       - main
     paths:
-       - 'aaa'
-#  schedule:
-#    - cron: 0 8 * * 5
+       - 'ree'
+  schedule:
+    - cron: 0 8 * * 5
 #  watch:
 #    types: started
 
@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ac2100,r3g,rm2100,packages,ac2100-dev,r3g-dev,rm2100-dev]
+        target: [packages]
         
     steps:
     - name: Checkout
