@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build Openwrt-Packages
+name: Build Openwrt-Packages(Theme)
 
 on:
   repository_dispatch:
@@ -37,7 +37,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [packages]
+        target: [theme]
         
     steps:
     - name: Checkout
