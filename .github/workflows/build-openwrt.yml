@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: [ac2100,r3g,rm2100,packages,ac2100-dev,r3g-dev,rm2100-dev]
+        target: [ac2100,r3,r3g,rm2100,packages,ac2100-dev,r3g-dev,rm2100-dev]
         
     steps:
     - name: Checkout
@@ -206,7 +206,7 @@ jobs:
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}_${{ env.FIRMWARE_TAG }}${{ env.FILE_DATE }}
-        path: ${{ env.FIRMWARE }}
+        path: openwrt/bin/targets
 
     - name: Upload firmware to cowtransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
