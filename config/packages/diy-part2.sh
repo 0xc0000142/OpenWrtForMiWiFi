@@ -21,3 +21,4 @@ mkdir -p luci-app-diskman && \
 mkdir -p parted && \
 wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/Makefile -O luci-app-diskman/Makefile
 wget https://raw.githubusercontent.com/lisaac/luci-app-diskman/master/Parted.Makefile -O parted/Makefile
+rm -rf package/feeds/packages/https-dns-proxy/
