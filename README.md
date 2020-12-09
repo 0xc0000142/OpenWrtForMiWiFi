@@ -13,8 +13,10 @@
 [Github:project-openwrt/openwrt](https://github.com/project-openwrt/openwrt)
 
 [1]: https://github.com/0xc0000142/OpenWrtForMiWiFi/actions
-[2]: https://github.com/0xc0000142/OpenWrtForMiWiFi/workflows/Build%20OpenWrt/badge.svg
+[2]: https://github.com/0xc0000142/OpenWrtForMiWiFi/workflows/Build%20OpenWrt/badge.svg?branch=main
 
 
 
 [![给👴编译OpenWrt][2]](https://github.com/0xc0000142/OpenWrtForMiWiFi/actions)
+![Build OpenWrt](https://github.com/0xc0000142/OpenWrtForMiWiFi/workflows/Build%20OpenWrt/badge.svg?branch=main&event=check_run)
+
