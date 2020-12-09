@@ -10,6 +10,8 @@
 
 [Github:P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt)
 
+[Github:project-openwrt/openwrt](https://github.com/project-openwrt/openwrt)
+
 [1]: https://github.com/0xc0000142/OpenWrtForMiWiFi/actions
 [2]: https://github.com/0xc0000142/OpenWrtForMiWiFi/workflows/Build%20OpenWrt/badge.svg
 
