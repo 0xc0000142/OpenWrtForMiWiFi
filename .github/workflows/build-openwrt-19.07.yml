@@ -16,9 +16,12 @@ on:
 #    types: published
   push:
     branches:
-      - 19.07
+      - main
     paths:
        - 'aaa'
+  pull_request:
+    branches:
+      - 19.07
 #  schedule:
 #    - cron: 0 8 * * 5
   watch:
