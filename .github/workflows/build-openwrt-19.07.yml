@@ -35,9 +35,9 @@ jobs:
     runs-on: ubuntu-18.04   
     if: github.event.repository.owner.id == github.event.sender.id
     
-    defaults:
-      run:
-        working-directory: /home/runner/work/OpenWrtForMiWiFi19.07/
+#    defaults:
+#      run:
+#        working-directory: /home/runner/work/OpenWrtForMiWiFi19.07/
     
     name: Build ${{matrix.target}}
     strategy:
@@ -60,7 +60,8 @@ jobs:
     - name: Clone branche code
       working-directory: /home/runner/work/
       run: |
-        git clone -b 19.07 https://github.com/0xc0000142/OpenWrtForMiWiFi.git OpenWrtForMiWiFi19.07
+        rm -rf OpenWrtForMiWiFi
+        git clone -b 19.07 https://github.com/0xc0000142/OpenWrtForMiWiFi.git OpenWrtForMiWiFi
 
     - name: Load Settings.ini
       run: |
