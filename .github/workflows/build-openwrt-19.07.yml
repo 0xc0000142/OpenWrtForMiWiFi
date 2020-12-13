@@ -58,7 +58,7 @@ jobs:
       uses: actions/checkout@main
       
     - name: Clone branche code
-      working-directory: /home/runner/work/
+      working-directory: /home/runner/work/OpenWrtForMiWiFi/
       run: |
         rm -rf OpenWrtForMiWiFi
         git clone -b 19.07 https://github.com/0xc0000142/OpenWrtForMiWiFi.git OpenWrtForMiWiFi
