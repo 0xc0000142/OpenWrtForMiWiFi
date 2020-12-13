@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build Openwrt-Packages(Theme)
+name: Build Openwrt-Packages(Theme) 18.06
 
 on:
   repository_dispatch:
@@ -16,7 +16,7 @@ on:
     types: published
   push:
     branches:
-      - main
+      - 18.06
     paths:
        - 'aaa'
        - 'ree'
