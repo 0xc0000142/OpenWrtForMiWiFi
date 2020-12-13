@@ -12,8 +12,8 @@ name: Build OpenWrt 19.07
 
 on:
   repository_dispatch:
-  release:
-    types: published
+#  release:
+#    types: published
   push:
     branches:
       - 19.07

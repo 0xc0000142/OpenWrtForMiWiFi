@@ -12,8 +12,8 @@ name: Build OpenWrt 18.06
 
 on:
   repository_dispatch:
-  release:
-    types: published
+#  release:
+#    types: published
   push:
     branches:
       - 18.06
