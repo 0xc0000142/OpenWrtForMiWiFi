@@ -28,16 +28,18 @@ env:
   TZ: Asia/Shanghai
   branche: 19.07
 
-defaults:
-  run:
-    shell: bash
-    working-directory: OpenWrtForMiWiFi19.07
+
 
 jobs:
   build:
     runs-on: ubuntu-18.04   
     if: github.event.repository.owner.id == github.event.sender.id
-
+    
+    defaults:
+      run:
+        shell: bash
+        working-directory: OpenWrtForMiWiFi19.07
+    
     name: Build ${{matrix.target}}
     strategy:
       fail-fast: false
@@ -58,7 +60,7 @@ jobs:
       
     - name: Clone branche code
       run: |
-        git clone -b env.branche http://github.com/0xc0000142/OpenWrtForMiWiFi OpenWrtForMiWiFi19.07
+        git clone -b 19.07 https://github.com/0xc0000142/OpenWrtForMiWiFi.git OpenWrtForMiWiFi19.07
 
     - name: Load Settings.ini
       run: |
