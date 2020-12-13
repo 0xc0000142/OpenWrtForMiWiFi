@@ -19,9 +19,6 @@ on:
       - main
     paths:
        - 'aaa'
-  pull_request:
-    branches:
-      - 18.06
 #  schedule:
 #    - cron: 0 8 * * 5
   watch:
@@ -29,6 +26,13 @@ on:
 
 env:
   TZ: Asia/Shanghai
+  branche: 18.06
+ 
+defaults:
+  run:
+    shell: bash
+    working-directory: OpenWrtForMiWiFi18.06
+    
 
 jobs:
   build:
@@ -53,6 +57,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@main
 
+    - name: Clone branche code
+      run: |
+        git clone -b env.branche http://github.com/0xc0000142/OpenWrtForMiWiFi OpenWrtForMiWiFi18.06
+        
     - name: Load Settings.ini
       run: |
         source "${GITHUB_WORKSPACE}/config/${{matrix.target}}/settings.ini"
