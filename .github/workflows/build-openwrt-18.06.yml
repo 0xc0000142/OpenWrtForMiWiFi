@@ -36,7 +36,7 @@ jobs:
     
     defaults:
       run:
-        working-directory: OpenWrtForMiWiFi18.06
+        working-directory: /home/runner/work/OpenWrtForMiWiFi18.06/
         
     name: Build ${{matrix.target}}
     strategy:
