@@ -37,7 +37,6 @@ jobs:
     
     defaults:
       run:
-        shell: bash
         working-directory: OpenWrtForMiWiFi19.07
     
     name: Build ${{matrix.target}}
