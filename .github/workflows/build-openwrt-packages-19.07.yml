@@ -42,23 +42,30 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@main
+      
+    - name: Clone branche code
+      working-directory: /home/runner/work/OpenWrtForRouter/
+      run: |
+        rm -rf OpenWrtForRouter
+        git clone -b 19.07 https://github.com/0xc0000142/OpenWrtForRouter.git OpenWrtForRouter
 
     - name: Load Settings.ini
       run: |
         source "${GITHUB_WORKSPACE}/config/${{matrix.target}}/settings.ini"
-        echo "::set-env name=REPO_URL::${REPO_URL}"
-        echo "::set-env name=REPO_BRANCH::${REPO_BRANCH}"
-        echo "::set-env name=FEEDS_CONF::${FEEDS_CONF}"
-        echo "::set-env name=COMMON_DIR::${COMMON_DIR}"
-        echo "::set-env name=FIRMWARE_TAG::${FIRMWARE_TAG}"
-        echo "::set-env name=DIY_P1_SH::${DIY_P1_SH}"
-        echo "::set-env name=DIY_P2_SH::${DIY_P2_SH}"
-        echo "::set-env name=SSH_ACTIONS::${SSH_ACTIONS}"
-        echo "::set-env name=UPLOAD_BIN_DIR::${UPLOAD_BIN_DIR}"
-        echo "::set-env name=UPLOAD_PACKAGES_DIR::${UPLOAD_PACKAGES_DIR}"
-        echo "::set-env name=UPLOAD_FIRMWARE::${UPLOAD_FIRMWARE}"
-        echo "::set-env name=UPLOAD_COWTRANSFER::${UPLOAD_COWTRANSFER}"
-        echo "::set-env name=UPLOAD_WETRANSFER::${UPLOAD_WETRANSFER}"
+        echo "REPO_URL=${REPO_URL}" >> $GITHUB_ENV
+        echo "REPO_BRANCH=${REPO_BRANCH}" >> $GITHUB_ENV
+        echo "FEEDS_CONF=${FEEDS_CONF}" >> $GITHUB_ENV
+        echo "COMMON_DIR=${COMMON_DIR}" >> $GITHUB_ENV
+        echo "FIRMWARE_TAG=${FIRMWARE_TAG}" >> $GITHUB_ENV
+        echo "DIY_P1_SH=${DIY_P1_SH}" >> $GITHUB_ENV
+        echo "DIY_P2_SH=${DIY_P2_SH}" >> $GITHUB_ENV
+        echo "SSH_ACTIONS=${SSH_ACTIONS}" >> $GITHUB_ENV
+        echo "UPLOAD_BIN_DIR=${UPLOAD_BIN_DIR}" >> $GITHUB_ENV
+        echo "UPLOAD_PACKAGES_DIR=${UPLOAD_PACKAGES_DIR}" >> $GITHUB_ENV
+        echo "UPLOAD_FIRMWARE=${UPLOAD_FIRMWARE}" >> $GITHUB_ENV
+        echo "UPLOAD_COWTRANSFER=${UPLOAD_COWTRANSFER}" >> $GITHUB_ENV
+        echo "UPLOAD_WETRANSFER=${UPLOAD_WETRANSFER}" >> $GITHUB_ENV
+        echo "USE_MULTI=${USE_MULTI}" >> $GITHUB_ENV
     - name: Initialization environment
       env:
         DEBIAN_FRONTEND: noninteractive
@@ -201,14 +208,18 @@ jobs:
         path: ${{ env.FIRMWARE }}
 
     - name: Upload firmware to cowtransfer
+      id: cowtransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
       run: |
         curl -fsSL git.io/file-transfer | sh
         ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
         echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
+        echo "::set-output name=url::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
     - name: Upload firmware to WeTransfer
+      id: wetransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
       run: |
         curl -fsSL git.io/file-transfer | sh
         ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+        echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
