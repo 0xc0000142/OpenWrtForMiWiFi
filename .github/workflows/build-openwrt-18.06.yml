@@ -57,10 +57,10 @@ jobs:
       uses: actions/checkout@main
 
     - name: Clone branche code
-      working-directory: /home/runner/work/OpenWrtForMiWiFi/
+      working-directory: /home/runner/work/OpenWrtForRouter/
       run: |
-        rm -rf OpenWrtForMiWiFi
-        git clone -b 18.06 https://github.com/0xc0000142/OpenWrtForMiWiFi.git OpenWrtForMiWiFi
+        rm -rf OpenWrtForRouter
+        git clone -b 18.06 https://github.com/0xc0000142/OpenWrtForRouter.git OpenWrtForRouter
         
     - name: Load Settings.ini
       run: |
