@@ -45,7 +45,7 @@ jobs:
       matrix:
         target: 
           - ac2100
-          - r3
+#          - r3
           - r3g
           - rm2100
           - packages
