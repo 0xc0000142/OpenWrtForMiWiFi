@@ -16,4 +16,5 @@
 # Add a feed source
 #sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
 rm -rf feeds/packages/net/miniupnpd/Makefile
-cp common-all/upnpMakefile feeds/packages/net/miniupnpd/Makefile
+cd ..
+cp common-all/upnpMakefile openwrt/feeds/packages/net/miniupnpd/Makefile
