@@ -262,7 +262,7 @@ jobs:
       run: |
         cd openwrt/bin/targets
         rm -rf ./*/*/packages
-        echo "name=FIRMWARE=$PWD" >> $GITHUB_ENV
+        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
     - name: Upload firmware directory
@@ -272,7 +272,7 @@ jobs:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}_${{ env.FIRMWARE_TAG }}${{ env.FILE_DATE }}
         path: openwrt/bin/targets
 
-  - name: Upload firmware to cowtransfer
+    - name: Upload firmware to cowtransfer
       id: cowtransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
       run: |
