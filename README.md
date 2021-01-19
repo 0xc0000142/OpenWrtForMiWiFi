@@ -17,5 +17,4 @@
 
 
 
-![Build OpenWrt 19.07](https://github.com/0xc0000142/OpenWrtForRouter/workflows/Build%20OpenWrt%2019.07/badge.svg)
-
+[![给👴编译OpenWrt][2]](https://github.com/0xc0000142/OpenWrtForRouter/workflows/Build%20OpenWrt%2019.07/badge.svg)
