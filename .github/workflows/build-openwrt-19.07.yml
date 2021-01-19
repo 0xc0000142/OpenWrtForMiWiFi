@@ -73,15 +73,14 @@ jobs:
         echo "FIRMWARE_TAG=${FIRMWARE_TAG}" >> $GITHUB_ENV
         echo "DIY_P1_SH=${DIY_P1_SH}" >> $GITHUB_ENV
         echo "DIY_P2_SH=${DIY_P2_SH}" >> $GITHUB_ENV
+        echo "SSH_ACTIONS=${SSH_ACTIONS}" >> $GITHUB_ENV
         echo "UPLOAD_BIN_DIR=${UPLOAD_BIN_DIR}" >> $GITHUB_ENV
         echo "UPLOAD_PACKAGES_DIR=${UPLOAD_PACKAGES_DIR}" >> $GITHUB_ENV
         echo "UPLOAD_FIRMWARE=${UPLOAD_FIRMWARE}" >> $GITHUB_ENV
         echo "UPLOAD_COWTRANSFER=${UPLOAD_COWTRANSFER}" >> $GITHUB_ENV
         echo "UPLOAD_WETRANSFER=${UPLOAD_WETRANSFER}" >> $GITHUB_ENV
-        echo "UPLOAD_RELEASE=${UPLOAD_RELEASE}" >> $GITHUB_ENV
-        echo "UPLOAD_BIN_TO_GITHUB=${UPLOAD_BIN_TO_GITHUB}" >> $GITHUB_ENV
         echo "USE_MULTI=${USE_MULTI}" >> $GITHUB_ENV
-        
+
     - name: Initialization environment
       env:
         DEBIAN_FRONTEND: noninteractive
@@ -173,12 +172,9 @@ jobs:
         )
         fi
 
-    - name: SSH connection to Actions
-      uses: P3TERX/ssh2actions@v1.0.0
-      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
-      env:
-        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+#    - name: SSH connection to Actions
+#      uses: P3TERX/debugger-action@main
+#      if: env.SSH_ACTIONS == 'true' || contains(github.event.action, 'ssh')
 
     - name: Download package
       id: package
@@ -221,33 +217,8 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
-        name: OpenWrt_bin_${{ env.FIRMWARE_TAG }}${{ env.FILE_DATE }}
+        name: OpenWrt_bin${{ env.DEVICE_NAME }}_${{ env.FIRMWARE_TAG }}${{ env.FILE_DATE }}
         path: openwrt/bin
-        
-    - name: Upload packages directory
-      uses: actions/upload-artifact@main
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_PACKAGES_DIR == 'true'
-      with:
-        name: OpenWrt_packages${{ env.FILE_DATE }}
-        path: openwrt/bin/packages
-        
-    - name: Upload bin directory to GitHub
-      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_TO_GITHUB == 'true'
-      env: 
-        GITHUB_TOKEN: ${{ secrets.TOKEN }}
-      run: |
-        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git config --global user.name "github-actions[bot]"
-        git clone -b bin https://github.com/MiRouter/OpenWrtForMiWiFi.git uploadfiles
-        cd $GITHUB_WORKSPACE/uploadfiles/bin
-        rm -Rf *
-        git rm --cache *
-        cp -rf $GITHUB_WORKSPACE/openwrt/bin/* $GITHUB_WORKSPACE/uploadfiles/bin
-        cd ..
-        git add .
-        git commit -m "update$(TZ='Asia/Shanghai' date +@%Y%m%d)"
-        git push --quiet "https://${{ secrets.TOKEN }}@github.com/MiRouter/OpenWrtForMiWiFi" HEAD:bin
-
         
     - name: Upload packages directory
       uses: actions/upload-artifact@main
@@ -257,12 +228,12 @@ jobs:
         path: openwrt/bin/packages
 
     - name: Organize files
-      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       id: organize
+      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
         cd openwrt/bin/targets
         rm -rf ./*/*/packages
-        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+        echo "name=FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
     - name: Upload firmware directory
@@ -272,7 +243,7 @@ jobs:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}_${{ env.FIRMWARE_TAG }}${{ env.FILE_DATE }}
         path: openwrt/bin/targets
 
-    - name: Upload firmware to cowtransfer
+   - name: Upload firmware to cowtransfer
       id: cowtransfer
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
       run: |
@@ -289,23 +260,3 @@ jobs:
         ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
         echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
-        
-    - name: Generate release tag
-      id: tag
-      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-      run: |
-        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
-        touch release.txt
-        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
-        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-        echo "::set-output name=status::success"
-        
-    - name: Upload firmware to release
-      uses: softprops/action-gh-release@v1
-      if: steps.tag.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ steps.tag.outputs.release_tag }}
-        body_path: release.txt
-        files: ${{ env.FIRMWARE }}/*
