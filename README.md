@@ -17,6 +17,5 @@
 
 
 
-[![给👴编译OpenWrt][2]](https://github.com/0xc0000142/OpenWrtForMiWiFi/actions)
-![Build OpenWrt](https://github.com/0xc0000142/OpenWrtForMiWiFi/workflows/Build%20OpenWrt/badge.svg?branch=main&event=check_run)
+[![给👴编译OpenWrt][2]](https://github.com/0xc0000142/OpenWrtForRouter/workflows/Build%20OpenWrt%2019.07/badge.svg)
 
