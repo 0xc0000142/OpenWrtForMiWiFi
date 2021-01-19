@@ -257,8 +257,8 @@ jobs:
         path: openwrt/bin/packages
 
     - name: Organize files
-      id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      id: organize
       run: |
         cd openwrt/bin/targets
         rm -rf ./*/*/packages
