@@ -17,11 +17,6 @@
 #sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
 #!/bin/bash
 echo "佛祖保佑，编译必成"
-git clone https://github.com/siropboy/sirpdboy-package package/sirpdboy-package
-git clone -b packages-19.07 https://github.com/liuran001/openwrt-packages package/liuran001_packages
-git clone https://github.com/jerrykuku/luci-app-argon-config package/luci-app-argon-config
-git clone https://github.com/kenzok8/openwrt-packages package/kenzok8
-
 
 
 
