@@ -246,7 +246,7 @@ jobs:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}_${{ env.FIRMWARE_TAG }}${{ env.FILE_DATE }}
         path: openwrt/bin/targets
         
-    - name: Upload bin directory to OneDrive
+    - name: Install Rsync
       env:
         RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
         CUSTOM: ${{matrix.target}}
@@ -256,7 +256,13 @@ jobs:
          mkdir -p ~/.config/rclone/
          cat << EOF > ~/.config/rclone/rclone.conf
          $RCLONE_CONFIG
-         EOF
+
+    - name: Upload bin directory to OneDrive
+      env:
+        RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
+        CUSTOM: ${{matrix.target}}
+      run: |
+         time=`date '+%Y-%m-%d--%H-%M-%S'`
          echo "write rclone congfile done."
          tar -zcvf OpenWrt_"$CUSTOM"_Packages_"$time".tar.gz openwrt/bin/packages
          echo OpenWrt_"$CUSTOM"_Packages_"$time".tar.gz done.
