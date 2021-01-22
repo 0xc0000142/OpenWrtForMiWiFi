@@ -224,7 +224,7 @@ jobs:
         RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
         CUSTOM: ${{matrix.target}}
       run : |
-         time=`date '+%H-%M-%S'`
+         time=`date '+%Y-%m-%d--%H-%M-%S'`
          curl https://rclone.org/install.sh | sudo bash
          mkdir -p ~/.config/rclone/
          cat << EOF > ~/.config/rclone/rclone.conf
