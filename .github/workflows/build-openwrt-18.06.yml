@@ -212,6 +212,14 @@ jobs:
       if: (!cancelled())
       run: df -hT
 
+    - name: Organize files
+      id: organize
+      run: |
+        cd openwrt/bin/
+        mv -f ./targets/*/*/packages ./packages/core
+        echo "name=FIRMWARE=$PWD" >> $GITHUB_ENV
+        echo "::set-output name=status::success"
+
     - name: Upload bin directory
       uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
@@ -226,32 +234,28 @@ jobs:
         name: OpenWrt_packages${{ env.FILE_DATE }}
         path: openwrt/bin/packages
 
-    - name: Organize files
-      id: organize
-      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
-      run: |
-        cd openwrt/bin/targets
-        rm -rf ./*/*/packages
-        echo "name=FIRMWARE=$PWD" >> $GITHUB_ENV
-        echo "::set-output name=status::success"
-
     - name: Upload firmware directory
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
         name: OpenWrt_firmware${{ env.DEVICE_NAME }}_${{ env.FIRMWARE_TAG }}${{ env.FILE_DATE }}
         path: openwrt/bin/targets
-
-    - name: Upload firmware to cowtransfer
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
-      run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
-        echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
-
-    - name: Upload firmware to WeTransfer
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
-      run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
-        echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+        
+    - name: Upload bin directory to OneDrive
+      env:
+        RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
+        CUSTOM: ${{matrix.target}}
+      run : |
+         time=`date '+%H-%M-%S'`
+         curl https://rclone.org/install.sh | sudo bash
+         mkdir -p ~/.config/rclone/
+         cat << EOF > ~/.config/rclone/rclone.conf
+         $RCLONE_CONFIG
+         EOF
+         tar -zcvf OpenWrt_firmware_$CUSTOM_Packages_$time.tar.gz openwrt/bin/packages
+         tar -zcvf OpenWrt_firmware_$CUSTOM_targets_$time.tar.gz openwrt/bin/targets
+         tar -zcvf OpenWrt_firmware_$CUSTOM_bin_$time.tar.gz openwrt/bin
+         rclone mkdir od-sync:Openwrt/$time
+         rclone copy OpenWrt_firmware_$CUSTOM_Bin_$time.tar.gz od-sync:Openwrt/$time
+         rclone copy OpenWrt_firmware_$CUSTOM_Bin_$time.tar.gz od-sync:Openwrt/$time
+         rclone copy OpenWrt_firmware_$CUSTOM_Bin_$time.tar.gz od-sync:Openwrt/$time
