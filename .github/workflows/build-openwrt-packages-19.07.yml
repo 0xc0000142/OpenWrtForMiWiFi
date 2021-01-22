@@ -227,10 +227,18 @@ jobs:
          cat << EOF > ~/.config/rclone/rclone.conf
          $RCLONE_CONFIG
          EOF
-         tar -zcvf OpenWrt_firmware_$CUSTOM_Packages_$time.tar.gz openwrt/bin/packages
-         tar -zcvf OpenWrt_firmware_$CUSTOM_targets_$time.tar.gz openwrt/bin/targets
-         tar -zcvf OpenWrt_firmware_$CUSTOM_bin_$time.tar.gz openwrt/bin
-         rclone mkdir od-sync:Openwrt/$CUSTOM/$time
-         rclone copy OpenWrt_firmware_$CUSTOM_Bin_$time.tar.gz od-sync:Openwrt/$CUSTOM/$time
-         rclone copy OpenWrt_firmware_$CUSTOM_Bin_$time.tar.gz od-sync:Openwrt/$CUSTOM/$time
-         rclone copy OpenWrt_firmware_$CUSTOM_Bin_$time.tar.gz od-sync:Openwrt/$CUSTOM/$time
+         echo "write rclone congfile done."
+         tar -zcvf OpenWrt_"$CUSTOM"_Packages_"$time".tar.gz openwrt/bin/packages
+         echo OpenWrt_"$CUSTOM"_Packages_"$time".tar.gz done.
+         tar -zcvf OpenWrt_"$CUSTOM"_targets_"$time".tar.gz openwrt/bin/targets
+         echo OpenWrt_"$CUSTOM"_targets_"$time".tar.gz done.
+         tar -zcvf OpenWrt_"$CUSTOM"_bin_"$time".tar.gz openwrt/bin
+         echo OpenWrt_"$CUSTOM"_bin_"$time".tar.gz done.
+         rclone mkdir od-sync:Openwrt/"$CUSTOM"/"$time"
+         echo Rclone Mkdir od-sync:Openwrt/"$CUSTOM"/"$time" done.
+         rclone copy OpenWrt_"$CUSTOM"_bin_"$time".tar.gz od-sync:Openwrt/"$CUSTOM"/"$time"
+         echo Rclone upload OpenWrt_"$CUSTOM"_Bin_"$time".tar.gz done.
+         rclone copy OpenWrt_"$CUSTOM"_targets_"$time".tar.gz od-sync:Openwrt/"$CUSTOM"/"$time"
+         echo Rclone upload OpenWrt_"$CUSTOM"_targets_"$time".tar.gz done.
+         rclone copy OpenWrt_"$CUSTOM"_Packages_"$time".tar.gz od-sync:Openwrt/"$CUSTOM"/"$time"
+         echo Rclone upload OpenWrt_"$CUSTOM"_Packages_"$time".tar.gz done.
