@@ -216,7 +216,7 @@ jobs:
       id: organize
       run: |
         cd openwrt/bin/
-        mv -f ./targets/*/*/packages ./packages/core
+        mv -f ./targets/*/*/packages ./packages/mipsel_24kc/core
         echo "name=FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
 
